@@ -1,0 +1,281 @@
+/*
+Program description: This program allows the user to play a lotto game. The user can enter any 6 numbers between 1 and 42,
+and the program will store these numbers in an array. The user can then choose to display the numbers they entered, sort
+the numbers in ascending order, compare the numbers with a set of winning numbers to check if they have won a prize, or
+display the frequency of the numbers they entered. The program makes use of functions, pointers, and arrays, and uses 
+pointer notation to handle the data. The program will continue to display a menu of options and process the selected
+options until the user chooses to exit the program
+The winning lotto numbers are: 1, 3, 5, 7, 9, 11
+Author: Prince Ihekwereme
+Date: 17/03/22
+*/
+
+#include <stdio.h>
+#define SIZE 6
+int exitprogram(int *exit);
+int enternumbers(int[]);
+int displaynumbers(int[]);
+int array1[SIZE];
+int numbers;
+int sortcontents(int[]);
+int comparenumbers(int[], int[]);
+int start = 0;
+int displayfrequency(int[]);
+
+
+int main()
+{
+    int exit = 0;
+    int option;
+    int exiting = 0;
+	int choiceofnum[SIZE];
+	int *numbers[SIZE];
+	int i;
+	int array1[SIZE];
+	int result[SIZE];
+	int winning[SIZE] = {1, 3, 5, 7, 9, 11};
+	
+	
+    do
+    {	
+        printf("1: Enter any 6 numbers (1 - 42)\n");
+        printf("2: Display numbers entered\n");
+        printf("3: Sort numbers in ascending order\n");
+        printf("4: Compare numbers entered with winning numbers\n");
+        printf("5: Display frequency of numbers entered\n");
+        printf("6: Exit Program\n");
+		
+        scanf("%d", &option);
+		while(getchar() != '\n');
+
+		if(option < 1 || option > 6)
+        {
+            printf("\n\nInvalid option selected!\n\n");
+        } // end if
+
+        switch(option)
+        {
+            case 1:
+            {
+				start = 1;
+                enternumbers(array1);
+				break;
+            } // end case 1
+            case 2:
+			{
+				if(start != 1)
+				{
+					printf("You have not entered any numbers yet!\n\n");
+				} // end if
+					
+				else
+				{	
+	 			displaynumbers(array1);
+				} // end else
+				break;
+			} // end case 2
+			case 3:
+			{	
+				if(start != 1)
+				{
+					printf("You have not entered any numbers yet!\n\n");
+				} // end if
+
+				else
+				{
+				sortcontents(array1);
+				} // end else
+				break;
+			} // end case 3
+			
+			case 4:
+			{
+				if(start != 1)
+				{
+					printf("You have not entered any numbers yet!\n\n");
+				} // end if
+
+				else
+				{	
+				comparenumbers(array1, winning);
+				} // end else
+				break;
+			} // end case 4
+			
+			case 5:
+			{
+				if(start != 1)
+				{
+					printf("You have not entered any numbers yet!\n\n");
+				} // end if
+
+				else
+				{
+					displayfrequency(array1);
+				} // end else
+				break;
+			} // end case 5
+			
+			case 6:
+			{
+				exiting = exitprogram(&exit);
+				break;
+			} // end case 6
+		} // end switch
+    }while((exiting != 1)); // end do
+} // end main
+
+int enternumbers(int numentered[])
+{
+	int i; 
+	int nums;
+	printf("Please enter %d numbers 1-42:\n", SIZE);
+
+	for(i = 0; i < SIZE; i++)
+	{
+		scanf("%d", & *(numentered + i));
+        while(getchar() != '\n');
+		if(*(numentered + i) < 1 || *(numentered + i) > 42)
+		{
+			printf("Invalid number entered, please enter a number 1 - 42!\n");
+			i--;
+		} // end if
+	} // end for
+	
+	for(i = 0; i < SIZE; i++)
+	{
+		nums = *(numentered + i);
+	} // end for
+	
+	printf("\nNumbers sucessfully entered!\n\n");
+	return nums;
+} // end enternumbers
+
+int displaynumbers(int *display)
+{
+	int i;
+
+	printf("Numbers entered are: ");
+	for(i = 0; i < SIZE; i++)
+	{
+		printf("%d ", *(display + i));
+	} // end for
+	printf("\n\n");
+	return 0;
+} // end displaynumbers
+
+int sortcontents(int *contents)
+{
+	for(int i = 0; i < SIZE - 1; i++)
+	{
+		for(int j = 0; j < SIZE - 1; j++)
+		{
+			if(*(contents + j) > *(contents + j + 1))
+			{
+				int temp;
+				temp = *(contents + j);
+				*(contents + j) = *(contents + j + 1);
+				*(contents + j + 1) = temp;
+			} // end if
+		} // end for
+	} // end for
+
+	printf("Numbers sorted in ascending order: ");
+	for(int k = 0; k < SIZE; k++)
+	{
+      printf("%d ", *(contents + k));
+    } // end for
+	printf("\n\n");
+
+	return *contents;
+} // end sortcontents
+
+//1,3,5,7,9,11
+int comparenumbers(int *compare, int *win)
+{
+	int match = 0;
+	int k = 0;
+
+	for(int j = 0; j < SIZE; ++j)
+	{	
+		for(int i = 0; i < SIZE; ++i)
+		{
+			if(*(compare + i) == *(win + j))
+			{
+				match = match + 1;
+			} // end if
+		} // end for
+	} // end for
+	
+	printf("Generating results... \nMatches: %d\n", match);
+	
+	if(match == 6)
+    {
+      printf("You have won the jackpot!\n\n");
+    } //end if
+
+    else if(match == 5)
+    {
+      printf("You have won a new car!\n\n");
+    } //end else if
+
+    else if(match == 4)
+    {
+      printf("You have won a weekend away!\n\n");
+    } //end else if
+
+    else if(match == 3)
+    {
+      printf("You have won a cinema pass!\n\n");
+    } //end else if
+		
+    else
+    {
+      printf("You have not won anything!\n\n");
+    } //end else
+	
+	return 0;
+}
+
+
+int displayfrequency(int *frequency)
+{
+	int array2[SIZE];
+	
+	for(int i = 0; i < SIZE; i++)
+	{
+		int counter = 1;
+		if(*(frequency + i) != -1)
+		{
+			for(int j = (i + 1); j < SIZE; j++)
+			{
+				if(*(frequency + i) == *(frequency + j))
+				{
+					counter++;
+					*(frequency + j) = -1;
+				} // end if
+			} // end for
+			*(array2 + i) = counter;
+		} // end if
+	} // end for
+
+	for(int k = 0; k < SIZE; k++)
+	{
+		if(*(frequency + k) != -1)
+		{
+			printf("\nNumber %d was entered %d times\n", *(frequency + k), *(array2 + k));
+		} // end if
+		
+		printf("\n");
+	} // end for
+	return 0;
+} // end display frequency
+
+
+int exitprogram(int *exit)
+{
+	int leave;
+	leave = 1;
+	printf("Program ended!");
+	return 1;
+} // end exitprogram
